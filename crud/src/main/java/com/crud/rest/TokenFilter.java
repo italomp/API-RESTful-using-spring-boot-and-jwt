@@ -1,14 +1,17 @@
 package com.crud.rest;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.filter.GenericFilterBean;
 
 import io.jsonwebtoken.Jwts;
@@ -41,7 +44,8 @@ public class TokenFilter extends GenericFilterBean{
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
-		String auth = req.getHeader("Authorization");                 
+		String auth = extractAuth(req);
+		System.out.println(auth);
 		if(auth == null || !auth.startsWith("Bearer ")) {
 			throw new ServletException("Token inexistente ou mal formatado");
 		}
@@ -52,6 +56,12 @@ public class TokenFilter extends GenericFilterBean{
 			throw new ServletException("Token inválido ou expirado");
 		}
 		chain.doFilter(request, response);
+	}
+	
+	public String extractAuth(HttpServletRequest request) {
+		String auth = request.getHeader("Authorization");
+		System.out.println("header extraído da request " + auth); //remover esta linh@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+		return auth; //getHeaders retorna um enumeration; nextElement() chama o próximo elemento da estrutura.
 	}
 
 }

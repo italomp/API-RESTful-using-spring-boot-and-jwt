@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +24,7 @@ import com.crud.rest.service.ProductService;
  */
 @RestController
 @RequestMapping("/v1/product")
+@CrossOrigin(origins = "*")
 public class ProductController {
 
 	@Autowired
@@ -42,7 +44,7 @@ public class ProductController {
 	 * @return a responseEntity with the HttpSatus.
 	 */
 	@PostMapping("/private/")
-	public ResponseEntity create(@RequestBody Product product) {
+	public ResponseEntity create(@RequestHeader("Authorization") String token, @RequestBody Product product) {
 		Product prodSaved = this.productService.create(product);
 		return new ResponseEntity(HttpStatus.OK);
 	}

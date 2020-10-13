@@ -55,29 +55,19 @@ public class CrudApplication {
 		return filter;
 	}
 
-	@Configuration
-	public class MyConfiguration {
-
-	    @Bean
-	    public WebMvcConfigurer corsConfigurer() {
-	        return (WebMvcConfigurer) new WebMvcConfigurerIplmts() {
-	            @Override
-	            public void addCorsMappings(CorsRegistry registry) {
-	                registry.addMapping("/**")
-	                		.allowedOrigins("https://italomp.github.io:80/interface-CRUD/") //this value can't be "*", because allowCredentials(true).
-	                		.allowedMethods("PUT", "DELETE","POST","GET")
-	                		.allowedHeaders("Content-type", "Authorization")
-	                		.allowCredentials(true)
-	                		.maxAge(3600);
-	            }
-	        };
-	    }
 	    
-	    public class WebMvcConfigurerIplmts implements WebMvcConfigurer{
-	    	
-	    	public WebMvcConfigurerIplmts() {
-	    		
-	    	}
-	    }
-	}
+	@Configuration
+	public class WebConfig implements WebMvcConfigurer {
+		 @Override
+         public void addCorsMappings(CorsRegistry registry) {
+             registry.addMapping("/**")
+             		.allowedOrigins("https://italomp.github.io") //this value can't be "*", because allowCredentials(true).
+             		.allowedMethods("PUT", "DELETE","POST","GET", "OPTIONS")
+             		.allowedHeaders("Content-Type", "Authorization", "Referrer-Plicy")
+             		.allowCredentials(true)
+             		.maxAge(3600);
+         }
+	}    
+	    
+	    
 }
